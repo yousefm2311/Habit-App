@@ -24,7 +24,7 @@ class LoginViewModel extends GetxController {
   void loginMethod() {
     try {
       isLoading.value = true;
-      Dio_Helper.postData(url: 'user/login', data: {
+      Dio_Helper.postData(url: 'user/login', isLogin: true, data: {
         'username': usernameController.text,
         'password': passwordController.text,
       }).then((value) {

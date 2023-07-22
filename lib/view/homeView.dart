@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, avoid_unnecessary_containers
+// ignore_for_file: file_names, avoid_unnecessary_containers, unrelated_type_equality_checks
 
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,7 +67,7 @@ class HomeView extends GetWidget<HomeViewModel> {
                 const SizedBox(height: 10),
                 DatePicker(
                   DateTime.now(),
-                  height: MediaQuery.of(context).size.height * .11,
+                  height: MediaQuery.of(context).size.height * .12,
                   selectionColor: const Color.fromARGB(255, 176, 210, 209),
                   initialSelectedDate: DateTime.now(),
                   onDateChange: (selectedDate) {
@@ -116,33 +116,32 @@ class HomeView extends GetWidget<HomeViewModel> {
                   ],
                 ),
                 const SizedBox(height: 30),
-                DateTime.now().day == con.select!.day
-                    ? Expanded(
-                        child: con.isLoading.value
-                            ? const Center(
-                                child: CupertinoActivityIndicator(
-                                  color: Colors.black,
-                                ),
-                              )
-                            : ListView.separated(
-                                physics: const BouncingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  // print("Select ${con.select!.day}");
-                                  // print(DateTime.now().day);
-                                  return _buildContainer(
-                                      context, index, con.hobbyModel[index]);
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const SizedBox(
-                                    height: 20,
-                                  );
-                                },
-                                itemCount: con.hobbyModel.length,
-                              ),
-                      )
-                    : Container(
-                        child: CustomText(text: "Good Work"),
-                      )
+                Expanded(
+                  child: con.isLoading.value
+                      ? const Center(
+                          child: CupertinoActivityIndicator(
+                            color: Colors.black,
+                          ),
+                        )
+                      : ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            // print("Select ${con.select!.day}");
+                            // print(DateTime.now().day);
+                            return controller.hobbyModel[index].daysOfHobby !=
+                                    con.select!.isUtc
+                                ? _buildContainer(
+                                    context, index, con.hobbyModel[index])
+                                : Container();
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(
+                              height: 20,
+                            );
+                          },
+                          itemCount: con.hobbyModel.length,
+                        ),
+                )
               ],
             ),
           ),
@@ -153,7 +152,7 @@ class HomeView extends GetWidget<HomeViewModel> {
 
   _buildContainer(context, index, model) => Container(
         width: double.infinity,
-        height: MediaQuery.of(context).size.height * .16,
+        height: MediaQuery.of(context).size.height * .18,
         decoration: BoxDecoration(
           color: index == 0
               ? const Color.fromARGB(255, 176, 210, 206)
@@ -199,6 +198,7 @@ class HomeView extends GetWidget<HomeViewModel> {
                     text: model.note!,
                     textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
                         color: Colors.grey.shade700,
                         fontWeight: FontWeight.w400),
                   ),

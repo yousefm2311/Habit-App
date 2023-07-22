@@ -35,9 +35,14 @@ class Dio_Helper {
     required String url,
     Map<String, dynamic>? query,
     required Map<String, dynamic> data,
+    var api_key,
+    bool isLogin = false,
   }) async {
     try {
-      dio!.options.headers = {};
+      dio!.options.headers = {
+        isLogin ? '' : 'Authorization': "Bearer $api_key",
+        'Content-Type': 'application/json'
+      };
       return dio!.post(url, queryParameters: query, data: data);
     } catch (e) {
       if (e is DioError) {

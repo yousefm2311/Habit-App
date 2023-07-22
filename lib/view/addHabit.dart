@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hobit_app/core/view_model/add_habit_view_model.dart';
@@ -39,6 +40,7 @@ class AddHabit extends GetWidget<AddHabitViewModel> {
                   MyTextFormField(
                     isShow: false,
                     text: 'title',
+                    controller: controller.titleController,
                     perfixIcon: const Icon(Icons.title),
                     type: TextInputType.text,
                     onComplete: () => FocusScope.of(context).nextFocus(),
@@ -48,6 +50,7 @@ class AddHabit extends GetWidget<AddHabitViewModel> {
                     isShow: false,
                     text: 'note',
                     maxLines: 7,
+                    controller: controller.noteController,
                     type: TextInputType.text,
                     perfixIcon: Padding(
                       padding: EdgeInsetsDirectional.only(
@@ -81,20 +84,30 @@ class AddHabit extends GetWidget<AddHabitViewModel> {
                     onComplete: () => FocusScope.of(context).unfocus(),
                   ),
                   const SizedBox(height: 20),
-                  CustomBottom(
-                    color: const Color.fromARGB(255, 176, 210, 209),
-                    onPressed: () {},
-                    text: CustomText(
-                      text: 'Save',
-                      textStyle:
-                          Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                color: Colors.white,
-                                fontSize: 22.0,
-                              ),
-                    ),
-                    width: double.infinity,
-                    height: 50,
-                  )
+                  GetBuilder<AddHabitViewModel>(builder: (control) {
+                    return CustomBottom(
+                      color: const Color.fromARGB(255, 176, 210, 209),
+                      onPressed: () {
+                        control.addHabit();
+                      },
+                      text: control.isLoading.value
+                          ? const CupertinoActivityIndicator(
+                              color: Colors.white,
+                            )
+                          : CustomText(
+                              text: 'Save',
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    color: Colors.white,
+                                    fontSize: 22.0,
+                                  ),
+                            ),
+                      width: double.infinity,
+                      height: 50,
+                    );
+                  })
                 ],
               ),
             ),

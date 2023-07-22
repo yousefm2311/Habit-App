@@ -13,9 +13,7 @@ class HomeViewModel extends GetxController {
   DateTime? select = DateTime.now();
   void changeTime(time) {
     select = time;
-    if (kDebugMode) {
-      print(select!.day.toString());
-    }
+
     update();
   }
 
@@ -29,15 +27,9 @@ class HomeViewModel extends GetxController {
         url: hobby,
         api_key: settingsServices.sharedPreferences!.getString('token'),
       ).then((value) {
-        if (kDebugMode) {
-          print(value.data);
-        }
         item = value.data;
         for (int i = 0; i < item.length; i++) {
           hobbyModel.add(HobbyModel.fromJson(item[i]));
-        }
-        if (kDebugMode) {
-          print(hobbyModel[1].daysOfHobby!);
         }
         isLoading.value = false;
         update();
